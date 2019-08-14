@@ -1,12 +1,13 @@
 {
-  "name": "platzicourses",
+  "name": "platzicourses-typescript",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": " nodemon index --exec babel-node -e js",
-    "prod": "cross-env NODE_ENV=production nodemon index --exec babel-node -e js",
-    "start": "NODE_ENV=production node index --exec babel-node -e js",
+    "dev": "nodemon --exec ts-node index.ts",
+    "prod": "cross-env NODE_ENV=production nodemon --exec ts-node index.ts",
+    "build": "tsc",
+    "start": "NODE_ENV=production node index.ts",
     "debug": "SET DEBUG=app:* && npm run dev"
   },
   "keywords": [],
@@ -15,6 +16,11 @@
   "dependencies": {
     "@hapi/boom": "^7.4.2",
     "@hapi/joi": "^15.1.0",
+    "@types/cors": "^2.8.5",
+    "@types/hapi__boom": "^7.4.0",
+    "@types/hapi__joi": "^15.0.3",
+    "@types/helmet": "0.0.43",
+    "@types/mongodb": "^3.2.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "debug": "^4.1.1",
@@ -24,12 +30,12 @@
     "mongodb": "^3.3.0-beta2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
+    "@types/express": "^4.17.0",
+    "@types/node": "^12.7.1",
     "chalk": "^2.4.2",
     "cross-env": "^5.2.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
   }
 }

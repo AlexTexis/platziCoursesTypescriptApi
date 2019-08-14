@@ -3,11 +3,11 @@ const route = Router()
 import { Students } from '../services/students'
 import { schema_validation } from '../middlewares/data_validation'
 import { schemaId,schemaStudent,schemaStudentUpdate } from '../schemas/index'
+import { Request,Response,Next } from '../types/index'
 
-
-route.get('/',async (req,res,next) => {
-  let students
-  let filter
+route.get('/',async (req:Request,res:Response,next:Next) => {
+  let students : Array<object>
+  let filter : object | any
   const { query } = req
   try 
   {
@@ -23,9 +23,11 @@ route.get('/',async (req,res,next) => {
   }
 })
 
-route.get('/:id',schema_validation(schemaId,'params'),async (req,res,next) => {
+route.get('/:id',
+schema_validation(schemaId,'params'),
+async (req:Request,res:Response,next:Next) => {
   const { id } = req.params
-  let student
+  let student : object
   try 
   {
     student = await new Students().getOne(id)
@@ -39,9 +41,11 @@ route.get('/:id',schema_validation(schemaId,'params'),async (req,res,next) => {
   }
 })
 
-route.post('/',schema_validation(schemaStudent,'body'),async (req,res,next) => {
+route.post('/',
+schema_validation(schemaStudent,'body'),
+async (req:Request,res:Response,next:Next) => {
   let { body } = req
-  let newStudent
+  let newStudent : object
  try 
  {  
   newStudent = await new Students().create(body)
@@ -55,8 +59,11 @@ route.post('/',schema_validation(schemaStudent,'body'),async (req,res,next) => {
  }
 })
 
-route.put('/:id',schema_validation(schemaId,'params'),schema_validation(schemaStudentUpdate,'body'),async (req,res,next) => {
-  let updatedStudent 
+route.put('/:id',
+schema_validation(schemaId,'params'),
+schema_validation(schemaStudentUpdate,'body'),
+async (req:Request,res:Response,next:Next) => {
+  let updatedStudent : object
   const { body } = req
   const { id } = req.params
   try 
@@ -76,8 +83,10 @@ route.put('/:id',schema_validation(schemaId,'params'),schema_validation(schemaSt
   }
 })
 
-route.delete('/:id',schema_validation(schemaId,'params'),async (req,res,next) => {
-  let studentRemoved 
+route.delete('/:id',
+schema_validation(schemaId,'params'),
+async (req:Request,res:Response,next:Next) => {
+  let studentRemoved : object
   const { id } = req.params
   try 
   {

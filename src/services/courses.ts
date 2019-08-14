@@ -1,8 +1,36 @@
 import { GET_ALL, GET_ONE,CREATE,DELETE,UPDATE,GET_ONE_WITH_PROYECTION } from '../lib/db'
 import { ObjectId } from 'mongodb'
 
+interface interfaceUpdate {
+  id : string ,
+  input : object
+}
+
+interface interfaceAddClass {
+  idRef : string ,
+  input : object | any
+}
+
+interface interfaceRemoveClass {
+  idRef : string ,
+  idClass : string
+}
+
+interface interfaceAddStudent {
+  idRef : string ,
+  idStudent : string 
+}
+
+interface interfaceRemoveStudent {
+  idRef : string ,
+  idStudent : string
+}
+
+
 export class Courses 
 {
+  private collection : string
+
   constructor()
   {
     this.collection = 'courses'
@@ -10,7 +38,8 @@ export class Courses
   
   async getAll() 
   {
-    let courses 
+    let courses : Array<object>
+
     courses = await GET_ALL({ 
       collection : this.collection,
     })
@@ -18,10 +47,11 @@ export class Courses
     return courses || []
   }
 
-  async getOne(id) 
+  async getOne(id : string) 
   {
-    let course
-    const filter = { _id : ObjectId(id) }
+    let course : object
+
+    const filter = { _id : new ObjectId(id) }
 
     course = await GET_ONE({ 
       collection : this.collection,
@@ -31,9 +61,9 @@ export class Courses
     return course 
   }
 
-  async create(input) 
+  async create(input : object) 
   {
-    let courseCreated
+    let courseCreated : object
 
     courseCreated = await CREATE({
       collection : this.collection,
@@ -43,11 +73,11 @@ export class Courses
     return courseCreated 
   }
 
-  async delete(id) 
+  async delete(id : string) 
   {
-    let courseDeleted
+    let courseDeleted : object
     
-    const filter = {_id : ObjectId(id) }
+    const filter = {_id : new ObjectId(id) }
 
     courseDeleted = await DELETE({
       collection : this.collection,
@@ -57,13 +87,13 @@ export class Courses
     return courseDeleted 
   }
 
-  async update({id,input}={}) 
+  async update(params : interfaceUpdate) 
   {
  
-    let courseUpdated
+    let courseUpdated : object
 
-    const query = { $set : input } 
-    const filter = { _id: ObjectId(id) } 
+    const query = { $set : params.input } 
+    const filter = { _id: new ObjectId(params.id) } 
 
     courseUpdated = await UPDATE({
       collection : this.collection,
@@ -75,12 +105,12 @@ export class Courses
   }
 
   
-  async addClass({idRef,input}={}) 
+  async addClass(params : interfaceAddClass) 
   {
-    let classAdd
-    let response_projection
+    let classAdd : object | any
+    let response_projection : object
 
-    const filter_class = { _id : ObjectId(input._id) } 
+    const filter_class = { _id : new ObjectId(params.input._id) } 
     const proyection ={ _id : 1,name:1 }
 
     response_projection = await GET_ONE_WITH_PROYECTION({
@@ -89,7 +119,7 @@ export class Courses
       proyection
     })
 
-    const filter = { _id : ObjectId(idRef) }
+    const filter = { _id : new ObjectId(params.idRef) }
     const query = { $addToSet : { class : response_projection } }
 
     classAdd = await UPDATE({
@@ -104,12 +134,12 @@ export class Courses
     } 
   }
 
-  async removeClass({idRef,idClass}={}) 
+  async removeClass(params : interfaceRemoveClass) 
   {
-    let classRemoved
+    let classRemoved : object | any
 
-    const filter = { _id : ObjectId(idRef) }
-    const query = { $pull : { class : { _id : ObjectId (idClass)} } }
+    const filter = { _id : new ObjectId(params.idRef) }
+    const query = { $pull : { class : { _id : new ObjectId (params.idClass)} } }
 
     classRemoved = await UPDATE({
       collection : this.collection,
@@ -119,16 +149,16 @@ export class Courses
 
     return {
       _id : classRemoved['_id'],
-      removed : idClass
+      removed : params.idClass
     } 
   }
 
-  async addStudent({idRef,idStudent}={}) 
+  async addStudent(params : interfaceAddStudent) 
   {
-    let studentAdd
-    let response_proyection
+    let studentAdd : object | any
+    let response_proyection : object
 
-    const filter_student = { _id :  ObjectId(idStudent._id) }
+    const filter_student = { _id :  new ObjectId(params.idStudent) }
     const proyection  = { projection : { _id : 1,name :1,surnames :1 } }
     
     response_proyection = await GET_ONE_WITH_PROYECTION({
@@ -138,7 +168,7 @@ export class Courses
     })
 
 
-    const filter = { _id : ObjectId(idRef) }
+    const filter = { _id : new ObjectId(params.idRef) }
     const query = { $addToSet : { alumns : response_proyection} }
 
     studentAdd = await UPDATE({
@@ -153,12 +183,12 @@ export class Courses
     }
   }
 
-  async removeStudent({idRef,idStudent}={}) 
+  async removeStudent(params : interfaceRemoveStudent) 
   {
-    let response
+    let response : object | any
 
-    const filter = { _id : ObjectId(idRef) }
-    const query = { $pull : { alumns : { _id : ObjectId( idStudent) } } }
+    const filter = { _id : new ObjectId(params.idRef) }
+    const query = { $pull : { alumns : { _id : new ObjectId( params.idStudent) } } }
 
     response = await UPDATE({
       collection : this.collection,
@@ -167,8 +197,8 @@ export class Courses
     })
 
     return {
-      _id : response['_id'],
-      removed : idStudent
+      _id : response['_id'], //id reference (course)
+      removed : params.idStudent
     } 
   }
 }

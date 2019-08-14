@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import helmet from 'helmet'
 import cors from 'cors'
+import { Request,Response } from './src/types/index'
 
 const app = express()
 
@@ -15,7 +16,7 @@ import routeAlumns from './src/routes/students'
 import routeCourses from './src/routes/courses'
 import routeClasses from './src/routes/classes'
 
-app.get('/',(req,res) => res.json({ message : 'welcome to api platzi courses with node js'}))
+app.get('/',(req:Request,res:Response) => res.json({ message : 'welcome to api platzi courses with typescript'}))
 app.use('/students',routeAlumns)
 app.use('/courses',routeCourses)
 app.use('/classes',routeClasses)

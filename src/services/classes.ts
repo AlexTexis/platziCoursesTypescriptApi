@@ -1,22 +1,27 @@
 import { GET_ALL,CREATE,DELETE } from '../lib/db'
 import { ObjectId } from 'mongodb'
 
+interface interfaceFilters {
+  name ? : string | any
+}
 
 export class Classes 
 {
+  private collection : string
+
   constructor()
   {
     this.collection = 'classes'
   }
 
-  async getAll(filters={}) 
+  async getAll(filters : interfaceFilters ) 
   {
-    let classes 
-    let filter
+    let classes : Array<object>
+    let filter : object | any
 
     if(Object.keys(filters).length)
     {
-     filter =  { name  : new RegExp(filters.name || false)  }
+     filter =  { name  : new RegExp(filters.name || false,'i')  }
     }
 
     classes = await GET_ALL({ 
@@ -27,9 +32,9 @@ export class Classes
     return classes || []
   }
 
-  async create(input) 
+  async create(input : object) 
   {
-    let classCreated
+    let classCreated : object
 
     classCreated = await CREATE({
       collection : this.collection,
@@ -39,10 +44,10 @@ export class Classes
     return classCreated 
   }
 
-  async delete(id) 
+  async delete(id : string) 
   {
-    let classRemoved
-    const filter = {_id : ObjectId(id) }
+    let classRemoved : object
+    const filter = {_id : new ObjectId(id) }
 
     classRemoved = await DELETE({
       collection : this.collection,

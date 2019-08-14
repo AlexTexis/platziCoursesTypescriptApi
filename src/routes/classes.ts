@@ -3,10 +3,11 @@ const route = Router()
 import { Classes } from '../services/classes'
 import { schema_validation } from '../middlewares/data_validation'
 import { schemaId,schemaClass } from '../schemas/index'
+import { Request,Response,Next } from '../types/index'
 
-route.get('/',async (req,res,next) => {
-  let classes
-  let filter
+route.get('/',async (req:Request,res:Response,next:Next) => {
+  let classes : Array<object>
+  let filter : object
   const { query } = req
   try 
   {
@@ -22,9 +23,11 @@ route.get('/',async (req,res,next) => {
   }
 })
 
-route.post('/',schema_validation(schemaClass),async (req,res,next) => {
+route.post('/',
+schema_validation(schemaClass),
+async (req:Request,res:Response,next:Next) => {
   let { body } = req
-  let classAdded
+  let classAdded : object
   try 
   {  
     classAdded = await new Classes().create(body)
@@ -40,8 +43,10 @@ route.post('/',schema_validation(schemaClass),async (req,res,next) => {
 })
 
 
-route.delete('/:id',schema_validation(schemaId,'params'),async (req,res,next) => {
-  let classRemoved
+route.delete('/:id',
+schema_validation(schemaId,'params'),
+async (req:Request,res:Response,next:Next) => {
+  let classRemoved : object
   const { id } = req.params
   try 
   {

@@ -10,9 +10,10 @@ import {
   schemaIdsDeleteClass,
   schemaIdsDeleteStudent
  } from '../schemas/index'
+import { Request,Response,Next } from '../types/index'
 
-route.get('/',async (req,res,next) => {
-  let courses
+route.get('/',async (req:Request,res:Response,next:Next) => {
+  let courses : Array<object>
   try 
   {
     courses = await new Courses().getAll()
@@ -26,9 +27,11 @@ route.get('/',async (req,res,next) => {
   }
 })
 
-route.get('/:id',schema_validation(schemaId,'params'),async (req,res,next) => {
+route.get('/:id',
+schema_validation(schemaId,'params'),
+async (req:Request,res:Response,next:Next) => {
   const { id } = req.params
-  let course
+  let course : object
   try 
   {
     course = await new Courses().getOne(id)
@@ -42,9 +45,11 @@ route.get('/:id',schema_validation(schemaId,'params'),async (req,res,next) => {
   }
 })
 
-route.post('/',schema_validation(schemaCourse,'body'),async (req,res,next) => {
+route.post('/',
+schema_validation(schemaCourse,'body'),
+async (req:Request,res:Response,next:Next) => {
   let { body } = req
-  let newCourse
+  let newCourse : object
  try 
  {  
   newCourse = await new Courses().create(body)
@@ -58,8 +63,11 @@ route.post('/',schema_validation(schemaCourse,'body'),async (req,res,next) => {
  }
 })
 
-route.put('/:id',schema_validation(schemaId,'params'),schema_validation(schemaCourseUpdate,'body'),async (req,res,next) => {
-  let updateCourse 
+route.put('/:id',
+schema_validation(schemaId,'params'),
+schema_validation(schemaCourseUpdate,'body'),
+async (req:Request,res:Response,next:Next) => {
+  let updateCourse : object
   const { body } = req
   const { id } = req.params
   try 
@@ -79,8 +87,10 @@ route.put('/:id',schema_validation(schemaId,'params'),schema_validation(schemaCo
   }
 })
 
-route.delete('/:id',schema_validation(schemaId,'params'),async (req,res,next) => {
-  let courseRemoved
+route.delete('/:id',
+schema_validation(schemaId,'params'),
+async (req:Request,res:Response,next:Next) => {
+  let courseRemoved : object
   const { id } = req.params
   try 
   {
@@ -99,8 +109,11 @@ route.delete('/:id',schema_validation(schemaId,'params'),async (req,res,next) =>
 
 
 // CLASS ENDPOINTS
-route.post('/:id/class',schema_validation(schemaId,'params'),schema_validation(schemaIdCourseClass,'body'),async (req,res,next) => {
-  let classAdd 
+route.post('/:id/class',
+schema_validation(schemaId,'params'),
+schema_validation(schemaIdCourseClass,'body'),
+async (req:Request,res:Response,next:Next) => {
+  let classAdd : object
   const { body } = req
   const { id } = req.params
   try 
@@ -120,8 +133,10 @@ route.post('/:id/class',schema_validation(schemaId,'params'),schema_validation(s
   }
 })
 
-route.delete('/:id/class/:idClass',schema_validation(schemaIdsDeleteClass,'params'),async (req,res,next) => {
-  let classRemoved 
+route.delete('/:id/class/:idClass',
+schema_validation(schemaIdsDeleteClass,'params'),
+async (req:Request,res:Response,next:Next) => {
+  let classRemoved : object
   const { id,idClass } = req.params
   try 
   {
@@ -142,15 +157,18 @@ route.delete('/:id/class/:idClass',schema_validation(schemaIdsDeleteClass,'param
 
 
 // STUDENTS ENDPOINTS
-route.post('/:id/students',schema_validation(schemaId,'params'),schema_validation(schemaIdCourseStudent,'body'),async (req,res,next) => {
-  let studentAdd 
+route.post('/:id/students',
+schema_validation(schemaId,'params'),
+schema_validation(schemaIdCourseStudent,'body'),
+async (req:Request,res:Response,next:Next) => {
+  let studentAdd : object
   const { body } = req
   const { id } = req.params
   try 
   {
     studentAdd = await new Courses().addStudent({
       idRef:id,
-      idStudent : body
+      idStudent : body['_id']
     })
 
     res.status(200).json({
@@ -163,8 +181,10 @@ route.post('/:id/students',schema_validation(schemaId,'params'),schema_validatio
   }
 })
 
-route.delete('/:id/students/:idStudent',schema_validation(schemaIdsDeleteStudent,'params'),async (req,res,next) => {
-  let studentRemoved 
+route.delete('/:id/students/:idStudent',
+schema_validation(schemaIdsDeleteStudent,'params'),
+async (req:Request,res:Response,next:Next) => {
+  let studentRemoved : object
   const { id,idStudent } = req.params
   try 
   {

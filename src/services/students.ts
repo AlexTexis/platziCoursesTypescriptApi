@@ -1,21 +1,32 @@
 import { GET_ALL, GET_ONE,CREATE,DELETE,UPDATE } from '../lib/db'
 import { ObjectId } from 'mongodb'
 
+interface interfaceFilters {
+  name : string | any
+}
+
+interface interfaceUpdate {
+  id : string,
+  input : object
+}
+
 export class Students 
 {
+  private collection : string
+
   constructor()
   {
     this.collection = 'students'
   }
 
-  async getAll(filters={}) 
+  async getAll(filters : interfaceFilters) 
   {
-    let students 
-    let filter 
+    let students : Array<object>
+    let filter : object | any
     
     if(Object.keys(filters).length)
     {
-     filter =  { name  : new RegExp(filters.name || false)  }
+     filter =  { name  : new RegExp(filters.name || false,'i')  }
     }
 
     students = await GET_ALL({ 
@@ -26,22 +37,22 @@ export class Students
     return students || []
   }
 
-  async getOne(id) 
+  async getOne(id : string) 
   {
-    let student
-    const query = { _id : ObjectId(id) }
+    let student : object
+    const filter = { _id : new ObjectId(id) }
 
     student = await GET_ONE({ 
       collection : this.collection,
-      query
+      filter
     })
 
     return student
   }
 
-  async create(input) 
+  async create(input : object) 
   {
-    let studentCreated
+    let studentCreated : object
 
     studentCreated = await CREATE({
       collection : this.collection,
@@ -51,10 +62,10 @@ export class Students
     return studentCreated 
   }
 
-  async delete(id) 
+  async delete(id : string) 
   {
-    let studentRemoved
-    const filter = {_id : ObjectId(id) }
+    let studentRemoved : object
+    const filter = {_id : new ObjectId(id) }
 
     studentRemoved = await DELETE({
       collection : this.collection,
@@ -64,11 +75,11 @@ export class Students
     return studentRemoved 
   }
 
-  async update({id,input}={}) 
+  async update(params : interfaceUpdate) 
   {
-    let studentUpdated
-    const query = { $set : input } 
-    const filter = { _id: ObjectId(id) } 
+    let studentUpdated : object
+    const query = { $set : params.input } 
+    const filter = { _id: new ObjectId(params.id) } 
 
     studentUpdated = await UPDATE({
       collection : this.collection,

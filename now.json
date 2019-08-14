@@ -1,9 +1,9 @@
 {
   "version" : 2,
-  "name" : "platzi-courses-node",
+  "name" : "platzi-courses-typescript",
   "builds" : [
     {
-      "src" : "index.js",
+      "src" : "index.ts",
       "use" : "@now/node-server"
     }
   ],
@@ -15,7 +15,7 @@
         "Access-Control-Allow-Headers": "X-Request-With,Content-Type,Accept"
       },
       "src" : "/.*",
-      "dest" : "index.js"
+      "dest" : "index.ts"
     }
   ],
   "env" : {
