@@ -21,11 +21,11 @@
     "@types/hapi__joi": "^15.0.3",
     "@types/helmet": "0.0.43",
     "@types/mongodb": "^3.2.1",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "debug": "^4.1.1",
     "dotenv": "^8.0.0",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "helmet": "^3.20.0",
     "mongodb": "^3.3.0-beta2"
   },
